@@ -1,0 +1,67 @@
+<div uk-grid class="app" uk-match-height>
+  <div class="uk-width-1-4" style="background: #2C3E50">
+    <div class="title-block">
+      <div class="uk-margin-left" style="padding-bottom: 15px;">
+        <span class="title">
+          RaiBlocks
+          <span class="uk-text-success uk-text-middle" *ngIf="node.online" title="Node is online. Block {{ node.count }} ({{ node.unchecked}} unchecked)" uk-icon="icon: bolt" uk-tooltip></span>
+          <span class="uk-text-warning uk-text-middle" *ngIf="!node.online" title="Node is offline.  Check settings or start RaiWallet." uk-icon="icon: warning" uk-tooltip></span>
+        </span>
+        <span class="balance-text">Balance</span>
+        <span class="balance">{{ wallet.balance | rai: 'dynamic' }}</span>
+        <span class="balance-text uk-text-muted">Pending</span>
+        <span class="balance uk-text-muted">{{ wallet.pending | rai: 'dynamic' }}</span>
+      </div>
+
+    </div>
+
+    <app-wallet-widget></app-wallet-widget>
+
+    <ul class="uk-nav uk-nav-default uk-nav-parent-icon left-nav" uk-nav>
+      <li routerLink="/accounts" routerLinkActive="uk-active"><a routerLink="/accounts" routerLinkActive="active" class="uk-margin-left">Accounts</a></li>
+      <li><a routerLink="/history" routerLinkActive="active" class="uk-margin-left">History</a></li>
+      <li><a routerLink="/send" routerLinkActive="active" class="uk-margin-left">Send</a></li>
+      <li>
+        <div uk-grid>
+          <div class="uk-width-3-4">
+            <a routerLink="/receive" routerLinkActive="active" class="uk-margin-left">Receive</a>
+          </div>
+          <div class="uk-width-1-4 uk-text-center">
+            <span *ngIf="wallet.pendingTransactions.length" class="uk-badge uk-text-top" style="font-size: 16px; padding-bottom: 2px;">{{ wallet.pendingTransactions.length }}</span>
+          </div>
+        </div>
+      </li>
+      <li class="uk-parent">
+        <a href="#" class="uk-margin-left">Settings</a>
+        <ul class="uk-nav-sub">
+          <li><a routerLink="/manage-wallet" routerLinkActive="active" class="uk-margin-left">Manage Wallet</a></li>
+          <li><a routerLink="/configure" routerLinkActive="active" class="uk-margin-left">Configure Node</a></li>
+          <li><a routerLink="/configure-wallet" routerLinkActive="active" class="uk-margin-left">Configure Wallet</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class="uk-width-3-4" style="padding-left: 0;">
+    <div class="uk-panel uk-panel-scrollable" style="height: 500px;">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<div class="uk-background-secondary footer" style="margin-top: 0;" uk-grid>
+  <div class="uk-width-1-5">
+    <div class="uk-margin-left">
+      v1.0 - <a href="/index.html">Reload App</a>
+    </div>
+  </div>
+  <div class="uk-width-4-5 uk-text-right">
+    <div class="uk-margin-right">
+      &copy; 2018 <a routerLink="/index.html">RaiVault.io</a>
+    </div>
+  </div>
+</div>
+<app-notifications></app-notifications>
+
+
+
+

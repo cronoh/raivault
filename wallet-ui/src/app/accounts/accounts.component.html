@@ -1,0 +1,35 @@
+<div class="uk-animation-slide-left-small" uk-grid>
+  <div class="uk-width-1-1">
+    <div uk-grid>
+      <div class="uk-width-1-2"><h2>Accounts</h2></div>
+      <div class="uk-width-1-2 uk-text-right">
+        <button class="uk-button uk-button-default" (click)="createAccount()">
+          <span uk-icon="icon: plus"></span> Create New Account
+        </button>
+      </div>
+    </div>
+
+    <div class="uk-card uk-card-default uk-margin-top">
+      <table class="uk-table uk-table-striped uk-table-small">
+        <thead>
+        <tr>
+          <th>Account</th>
+          <th>Balance</th>
+          <th>Pending</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let account of accounts$ | async">
+          <td class="uk-text-nowrap">{{ account.id }}</td>
+          <td>{{ account.balance | rai: 'dynamic' }}</td>
+          <td>{{ account.pending | rai: 'dynamic' }}</td>
+        </tr>
+        <tr *ngIf="!(accounts$ | async).length">
+          <td colspan="4" style="text-align: center;">No accounts</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

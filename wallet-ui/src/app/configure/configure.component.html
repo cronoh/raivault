@@ -1,0 +1,164 @@
+<h2>Configure RaiBlocks Node</h2>
+<p>
+  RaiVault works by communicating directly with your RaiBlocks node, follow the steps below to make sure they are communicating properly.
+</p>
+
+<div *ngIf="currentStep == 0" uk-grid>
+  <div class="uk-width-1-1">
+    <div class="uk-card uk-card-default">
+      <div class="uk-card-header">
+        <h3 class="uk-card-title">Load Application Configuration File</h3>
+      </div>
+      <div class="uk-card-body">
+        <p *ngIf="appConfigFound">
+          The application configuration file was loaded successfully.  Continue to the next step.
+        </p>
+        <p *ngIf="!appConfigFound">
+          We had trouble loading your application configuration file.  Please make sure permissions are correct on this
+          application and report a bug to the github if you continue experiencing issues!
+        </p>
+      </div>
+      <div class="uk-card-footer uk-text-right" *ngIf="appConfigFound">
+        <button (click)="currentStep = 1" class="uk-button uk-button-primary">Continue</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<div *ngIf="currentStep == 1" uk-grid>
+  <div class="uk-width-1-1">
+    <div class="uk-card uk-card-default">
+      <div class="uk-card-header">
+        <h3 class="uk-card-title">Load Node Configuration File</h3>
+      </div>
+      <div class="uk-card-body">
+        <div *ngIf="nodeConfigFound">
+          The RaiBlocks Node configuration file was loaded successfully!  Continue to the next step.
+        </div>
+        <div *ngIf="!nodeConfigFound">
+          We were unable to locate your RaiBlocks Node configuration file.  Make sure you have installed the RaiWallet desktop
+          application from www.raiblocks.net.<br>
+          <br>
+          If you do have the wallet installed, please locate your config.json file and update the path below<br>
+          <br>
+          <div uk-grid>
+            <div class="uk-width-3-4">
+              <input type="text" class="uk-input" [(ngModel)]="appConfigNodeConfigModel" placeholder="C:/Windows/Foo">
+            </div>
+            <div class="uk-width-1-4">
+              <button class="uk-button uk-button-primary" (click)="updateNodeConfigLocation()">Update Setting</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="uk-card-footer uk-text-right" *ngIf="nodeConfigFound">
+        <button (click)="currentStep = 2" class="uk-button uk-button-primary">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div uk-grid *ngIf="currentStep == 2">
+  <div class="uk-width-1-1">
+    <div class="uk-card uk-card-default">
+      <div class="uk-card-header">
+        <h3 class="uk-card-title">Configure Node For Communication</h3>
+      </div>
+      <div class="uk-card-body">
+        <div *ngIf="node.online">
+          We were able to successfully connect to your RaiBlocks node!
+        </div>
+
+        <div *ngIf="!node.online">
+          <p>
+            Unfortunately, we were unable to connect to your RaiBlocks node.  Use the settings below to properly configure your RaiBlocks node for communicating.
+            Once it is properly configured, restart your RaiWallet application, then <a (click)="checkNodeStatus()">click here to retry</a>.
+          </p>
+
+          <div class="uk-form-horizontal">
+            <div class="uk-margin">
+              <div class="uk-form-label">Enable RPC</div>
+              <div class="uk-form-controls uk-form-controls-text">
+                <label (click)="rpcEnable = true"><input class="uk-radio" type="radio" [ngModel]="rpcEnable" [value]="true" name="enable_rpc"> Yes (Required to function)</label><br>
+                <label (click)="rpcEnable = false"><input class="uk-radio" type="radio" [ngModel]="rpcEnable" [value]="false" name="enable_rpc"> No</label>
+              </div>
+            </div>
+
+            <div class="uk-margin">
+              <label class="uk-form-label" for="form-horizontal-address">RPC Address</label>
+              <div class="uk-form-controls">
+                <input [(ngModel)]="rpcAddress" class="uk-input" id="form-horizontal-address" type="text" placeholder="RPC Address (Default ::ffff:127.0.0.1)">
+              </div>
+            </div>
+
+            <div class="uk-margin">
+              <label class="uk-form-label" for="form-horizontal-port">RPC Port</label>
+              <div class="uk-form-controls">
+                <input [(ngModel)]="rpcPort" class="uk-input" id="form-horizontal-port" type="text" placeholder="RPC Port (Default 7076)">
+              </div>
+            </div>
+
+            <div class="uk-margin">
+              <div class="uk-form-label">Enable Control</div>
+              <div class="uk-form-controls uk-form-controls-text">
+                <label (click)="rpcControlEnable = true"><input class="uk-radio" type="radio" [ngModel]="rpcControlEnable" [value]="true" name="enable_control"> Yes (Enables Sending, Receiving, Etc)</label><br>
+                <label (click)="rpcControlEnable = false"><input class="uk-radio" type="radio" [ngModel]="rpcControlEnable" [value]="false" name="enable_control"> No</label>
+              </div>
+            </div>
+
+            <div class="uk-margin">
+              <div class="uk-form-label"></div>
+              <div class="uk-form-controls uk-form-controls-text">
+                <button class="uk-button uk-button-primary" (click)="saveConfig()">Update RaiBlocks Node Config</button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <p>
+            Alternatively, if you want to use a networked node or are otherwise having trouble getting connected,
+            manually set your node API url below.
+          </p>
+
+          <div uk-grid>
+            <div class="uk-width-3-4">
+              <input type="text" class="uk-input" [(ngModel)]="appConfigNodeApiModel" placeholder="http://127.0.0.1:7076">
+            </div>
+            <div class="uk-width-1-4">
+              <button class="uk-button uk-button-primary" (click)="updateNodeApiLocation()">Update Setting</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="uk-card-footer uk-text-right" *ngIf="node.online">
+        <button (click)="currentStep = 3" class="uk-button uk-button-primary">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="currentStep == 3" uk-grid>
+  <div class="uk-width-1-1">
+    <div class="uk-card uk-card-default">
+      <div class="uk-card-header">
+        <h3 class="uk-card-title">Node Configuration Complete</h3>
+      </div>
+      <div class="uk-card-body">
+        <p>
+          Your RaiBlocks node is online and communicating properly with RaiVault.  To continue, configure your wallet.
+        </p>
+      </div>
+      <div class="uk-card-footer uk-text-right">
+        <button (click)="currentStep = 1" class="uk-button uk-button-primary">Configure Wallet</button>
+      </div>
+    </div>
+
+  </div>
+</div>

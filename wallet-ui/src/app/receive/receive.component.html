@@ -1,0 +1,63 @@
+<div class="uk-animation-slide-left-small" uk-grid>
+  <div class="uk-width-1-1">
+    <div uk-grid>
+      <div class="uk-width-1-2">
+        <h2>Receive XRB</h2>
+
+      </div>
+      <div class="uk-width-1-2 uk-text-right">
+        <button class="uk-button uk-button-default uk-text-right" (click)="searchIncoming()">Discover Pending Transactions</button>
+
+      </div>
+    </div>
+
+    <div uk-grid>
+      <div class="uk-width-1-1">
+        <p>
+          When someone sends you XRB, you are also in charge of performing a receive block to actually receive the funds.<br>
+          Select the account you are expecting to receive from below to search for pending transactions.
+        </p>
+      </div>
+    </div>
+
+    <div uk-grid>
+      <div class="uk-width-3-4">
+        <select class="uk-select" [(ngModel)]="pendingAccountModel">
+          <option [value]="0">All Accounts</option>
+          <option *ngFor="let account of accounts">{{ account }}</option>
+        </select>
+      </div>
+      <div class="uk-width-1-4">
+        <button class="uk-button uk-button-primary" (click)="getPending(pendingAccountModel)">Find Pending</button>
+      </div>
+      <div class="uk-width-1-1">
+        <div class="uk-card uk-card-default">
+          <table class="uk-table uk-table-striped uk-table-small">
+            <thead>
+            <tr>
+              <th>Account</th>
+              <th>Sender</th>
+              <th>Amount</th>
+              <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let block of pendingBlocks">
+              <td class="uk-text-nowrap">{{ block.account | squeeze}}</td>
+              <td class="uk-text-nowrap">{{ block.source | squeeze}}</td>
+              <td>{{ block.amount | rai: 'dynamic' }}</td>
+              <td class="uk-text-nowrap"><button (click)="receivePending(block.account, block.block)" class="uk-button uk-button-secondary">Receive</button></td>
+            </tr>
+            <tr *ngIf="!pendingBlocks.length">
+              <td colspan="4" style="text-align: center;">No pending transactions</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+

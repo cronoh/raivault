@@ -1,0 +1,51 @@
+<div class="uk-animation-slide-left-small" uk-grid>
+  <div class="uk-width-1-1">
+    <h2>Account History</h2>
+
+    <div uk-grid >
+      <div class="uk-width-1-1">
+        Select Account
+
+        <div uk-grid>
+          <div class="uk-width-3-4">
+            <select class="uk-select" #accountHistoryModel>
+              <option *ngFor="let account of accounts" [value]="account">{{ account }}</option>
+            </select>
+          </div>
+          <div class="uk-width-1-4">
+            <button class="uk-button uk-button-primary" (click)="getAccountHistory(accountHistoryModel.value)">View History</button>
+          </div>
+        </div>
+
+        <div class="uk-card uk-card-default uk-margin-top">
+          <table class="uk-table uk-table-striped uk-table-small">
+            <thead>
+            <tr>
+              <th>Account</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Hash</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let history of accountHistory">
+              <td class="uk-text-nowrap">{{ history.account | squeeze}}</td>
+              <td>{{ history.type }}</td>
+              <td>{{ history.amount | rai: 'dynamic' }}</td>
+              <td class="uk-text-nowrap">{{ history.hash | squeeze }}</td>
+            </tr>
+            <tr *ngIf="!accountHistory.length">
+              <td colspan="4" style="text-align: center;">No account history</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

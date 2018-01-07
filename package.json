@@ -1,0 +1,33 @@
+{
+  "name": "RaiVault",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Wallet for interacting with RaiBlocks nodes",
+  "author": "Andrew Steele",
+  "devDependencies": {
+    "electron-builder": "^19.52.1"
+  },
+  "build": {
+    "appId": "com.electron.raivault",
+    "buildVersion": "1.0.0",
+    "productName": "RaiVault",
+    "copyright": "Copyright © 2018 Andrew Steele",
+    "directories": {
+      "output": "dist",
+      "app": "rai-wallet"
+    },
+    "mac": {
+      "category": "public.app-category.finance"
+    },
+    "win": {
+      "target": "msi"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "scripts": {
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  }
+}

@@ -1,0 +1,29 @@
+<h2>Manage Wallet</h2>
+
+<div uk-grid>
+  <div class="uk-width-1-4">Wallet ID:</div>
+  <div class="uk-width-3-4">{{ wallet.id }}</div>
+</div>
+<div uk-grid>
+  <div class="uk-width-1-4">Wallet Status:</div>
+  <div class="uk-width-3-4">
+    <span *ngIf="wallet.locked">Locked</span>
+    <span *ngIf="!wallet.locked">Unlocked</span>
+  </div>
+</div>
+
+<h3>Change Wallet Password</h3>
+<div uk-grid>
+  <div class="uk-width-1-3">
+    <input class="uk-input" [(ngModel)]="newPassword" placeholder="New Password" type="password">
+  </div>
+  <div class="uk-width-1-3">
+    <input class="uk-input" [(ngModel)]="confirmPassword" placeholder="Confirm New Password" type="password">
+  </div>
+  <div class="uk-width-1-3">
+    <button (click)="changePassword()" class="uk-button uk-button-secondary">Update Password</button>
+  </div>
+</div>
+
+<!--<h3>Backup Wallet</h3>-->
+<!--<button (click)="backupWallet()" class="uk-button uk-button-primary">Backup Wallet Seed</button>-->
