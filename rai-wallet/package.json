@@ -1,20 +1,15 @@
 {
-  "name": "electron-quick-start",
+  "name": "raivault",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "A desktop wallet for working with RaiBlocks",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/cronoh/raivault",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
   ],
-  "author": "GitHub",
+  "author": "Andrew Steele",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "~1.7.8"

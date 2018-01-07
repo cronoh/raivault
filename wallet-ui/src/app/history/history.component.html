@@ -9,7 +9,7 @@
         <div uk-grid>
           <div class="uk-width-3-4">
             <select class="uk-select" #accountHistoryModel>
-              <option *ngFor="let account of accounts" [value]="account">{{ account }}</option>
+              <option *ngFor="let account of accounts$ | async" [value]="account.id">{{ account.id }}</option>
             </select>
           </div>
           <div class="uk-width-1-4">
@@ -31,7 +31,7 @@
             <tr *ngFor="let history of accountHistory">
               <td class="uk-text-nowrap">{{ history.account | squeeze}}</td>
               <td>{{ history.type }}</td>
-              <td>{{ history.amount | rai: 'dynamic' }}</td>
+              <td [ngClass]="{ 'uk-text-success': history.type == 'receive', 'uk-text-danger': history.type == 'send' }">{{ history.amount | rai: 'dynamic' }}</td>
               <td class="uk-text-nowrap">{{ history.hash | squeeze }}</td>
             </tr>
             <tr *ngIf="!accountHistory.length">

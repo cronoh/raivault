@@ -9,9 +9,6 @@ import {WalletService} from "./wallet.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  totalBalance: number = 0;
-  pendingBalance: number = 0;
-
   wallet = this.walletService.wallet;
   node = this.walletService.node;
 
@@ -28,5 +25,4 @@ export class AppComponent implements OnInit {
     }
     await this.walletService.pollPendingTransactions();
   }
-
 }

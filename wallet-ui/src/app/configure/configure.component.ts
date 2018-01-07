@@ -9,15 +9,17 @@ import {NotificationService} from "../notification.service";
 })
 export class ConfigureComponent implements OnInit {
 
-  walletID = 'abc';
-  rpcAddress = '127.0.0.1';
-  rpcPort = '7071';
+  rpcAddress = '::ffff:127.0.0.1';
+  rpcPort = '7076';
   rpcEnable = false;
   rpcControlEnable = false;
 
   currentStep = 0;
   appConfigFound = false;
   nodeConfigFound = false;
+
+  showStep1Helper = false;
+  showStep2Helper = false;
 
   appConfigNodeConfigModel = '';
   appConfigNodeApiModel = '';
@@ -27,14 +29,10 @@ export class ConfigureComponent implements OnInit {
   constructor(public walletService: WalletService, private notificationService: NotificationService) { }
 
   async ngOnInit() {
-    // this.loadWalletID();
-
     await this.loadAppConfig();
 
     await this.loadNodeConfig();
   }
-
-  checkNodeStatus = this.walletService.checkNodeStatus;
 
   async loadAppConfig() {
     try {
@@ -45,6 +43,7 @@ export class ConfigureComponent implements OnInit {
       this.appConfigNodeApiModel = appConfig.nodeRpcUrl;
 
     } catch (err) {
+      this.appConfigFound = false;
       console.log(`Unable to locate app config?`);
     }
   }
@@ -67,12 +66,37 @@ export class ConfigureComponent implements OnInit {
     }
   }
 
+  async setAutoConfig() {
+    this.rpcAddress = '::ffff:127.0.0.1';
+    this.rpcPort = '7076';
+    this.rpcEnable = true;
+    this.rpcControlEnable = true;
+    await this.saveConfig();
+  }
+
+  async recheckAppConfig() {
+    await this.loadAppConfig();
+    if (this.appConfigFound) {
+      this.notificationService.sendSuccess(`Application settings file created!`);
+    } else {
+      this.notificationService.sendError(`Unable to create application settings file.  Try restarting the application.`);
+    }
+  }
+  async recheckNodeConfig() {
+    await this.loadNodeConfig();
+    if (this.nodeConfigFound) {
+      this.notificationService.sendSuccess(`RaiBlocks configurations file successfully located!`)
+    } else {
+      this.notificationService.sendError(`Unable to locate the RaiBlocks configuration file.  Make sure RaiBlocks is installed, or try manual configuration`);
+    }
+  }
+
   async updateNodeConfigLocation() {
     const updateData = {
       nodeConfigFile: this.appConfigNodeConfigModel,
     };
     const updated = await this.walletService.walletApi.saveAppConfig(updateData);
-
+    this.notificationService.sendSuccess(`Successfully updated application setting!`);
     await this.loadNodeConfig();
   }
 
@@ -81,34 +105,13 @@ export class ConfigureComponent implements OnInit {
       nodeRpcUrl: this.appConfigNodeApiModel,
     };
     const updated = await this.walletService.walletApi.saveAppConfig(updateData);
+    this.notificationService.sendSuccess(`Successfully updated application setting!`);
     await this.loadNodeConfig();
     await this.walletService.checkNodeStatus();
   }
 
-
-  // loadWalletID() {
-  //   const localStorage = window.localStorage;
-  //   const walletID = localStorage.getItem('walletID');
-  //   console.log('Loaded wallet id from local store: ', walletID);
-  //   if (walletID && walletID.length > 10) {
-  //     this.walletID = walletID;
-  //   }
-  // }
-
-  // saveWalletID(walletID) {
-  //   console.log('Saving wallet id? ', walletID);
-  //   window.localStorage.setItem('walletID', walletID);
-  //   this.walletService.walletID = walletID;
-  //   this.walletID = walletID;
-  // }
-
-
-
   async saveConfig() {
-    await this.walletService.setWalletID(this.walletID);
-    // We also need to know if the node is online...
     const newConfig = {
-      wallet: this.walletID,
       rpc_enable: this.rpcEnable,
       rpc: {
         address: this.rpcAddress,
@@ -118,8 +121,16 @@ export class ConfigureComponent implements OnInit {
     };
 
     const config = await this.walletService.walletApi.saveNodeConfig(newConfig);
+    this.notificationService.sendSuccess(`Successfully updated RaiBlocks settings.  Make sure to restart RaiBlocks!`);
 
     await this.walletService.reloadWallet();
+  }
+
+  async recheckNodeStatus() {
+    await this.walletService.checkNodeStatus();
+    if (!this.walletService.node.online) {
+      this.notificationService.sendError(`Unable to connect to node.  Check settings and make sure RaiBlocks wallet is running`);
+    }
   }
 
 }

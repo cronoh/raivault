@@ -6,6 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class RaiPipe implements PipeTransform {
   precision = 4;
 
+  mrai = 1000000000000000000000000000000;
+  krai = 1000000000000000000000000000;
+  rai  = 1000000000000000000000000;
+
   transform(value: any, args?: any): any {
     const opts = args.split(',');
     const denomination = opts[0] || 'mrai';
@@ -13,18 +17,18 @@ export class RaiPipe implements PipeTransform {
 
     switch (denomination.toLowerCase()) {
       default:
-      case 'mrai': return `${(value / 1000000000000000000000000000000).toFixed(this.precision)}${!hideText ? ' mRai': ''}`;
-      case 'krai': return `${(value / 1000000000000000000000000000).toFixed(this.precision)}${!hideText ? ' kRai': ''}`;
-      case 'rai': return `${(value / 1000000000000000000000000).toFixed(this.precision)}${!hideText ? ' Rai': ''}`;
+      case 'mrai': return `${(value / this.mrai).toFixed(this.precision)}${!hideText ? ' mRai': ''}`;
+      case 'krai': return `${(value / this.krai).toFixed(this.precision)}${!hideText ? ' kRai': ''}`;
+      case 'rai': return `${(value / this.rai).toFixed(this.precision)}${!hideText ? ' Rai': ''}`;
       case 'raw': return `${value}${!hideText ? ' raw': ''}`;
       case 'dynamic':
-        const rai = (value / 1000000000000000000000000);
+        const rai = (value / this.rai);
         if (rai >= 1000000) {
-          return `${(value / 1000000000000000000000000000000).toFixed(this.precision)}${!hideText ? ' mRai': ''}`;
+          return `${(value / this.mrai).toFixed(this.precision)}${!hideText ? ' mRai': ''}`;
         } else if (rai >= 1000) {
-          return `${(value / 1000000000000000000000000000).toFixed(this.precision)}${!hideText ? ' kRai': ''}`;
+          return `${(value / this.krai).toFixed(this.precision)}${!hideText ? ' kRai': ''}`;
         } else if (rai >= 0.00001) {
-          return `${(value / 1000000000000000000000000).toFixed(this.precision)}${!hideText ? ' Rai': ''}`;
+          return `${(value / this.rai).toFixed(this.precision)}${!hideText ? ' Rai': ''}`;
         } else if (rai === 0) {
           return `${value}${!hideText ? ' mRai': ''}`;
         } else {

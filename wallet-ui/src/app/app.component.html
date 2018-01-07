@@ -1,4 +1,4 @@
-<div uk-grid class="app" uk-match-height>
+<div uk-grid class="app" uk-height-viewport>
   <div class="uk-width-1-4" style="background: #2C3E50">
     <div class="title-block">
       <div class="uk-margin-left" style="padding-bottom: 15px;">
@@ -40,26 +40,19 @@
         </ul>
       </li>
     </ul>
+
+    <div class="uk-position-bottom-left uk-position-small footer">
+      &hearts; <a routerLink="/">RaiVault.io</a>
+    </div>
+
   </div>
   <div class="uk-width-3-4" style="padding-left: 0;">
-    <div class="uk-panel uk-panel-scrollable" style="height: 500px;">
+    <div class="uk-panel uk-panel-scrollable uk-height-1-1">
       <router-outlet></router-outlet>
     </div>
   </div>
 </div>
 
-<div class="uk-background-secondary footer" style="margin-top: 0;" uk-grid>
-  <div class="uk-width-1-5">
-    <div class="uk-margin-left">
-      v1.0 - <a href="/index.html">Reload App</a>
-    </div>
-  </div>
-  <div class="uk-width-4-5 uk-text-right">
-    <div class="uk-margin-right">
-      &copy; 2018 <a routerLink="/index.html">RaiVault.io</a>
-    </div>
-  </div>
-</div>
 <app-notifications></app-notifications>
 
 

@@ -14,6 +14,7 @@ function getNodeConfigPath() {
   switch (os.platform()) {
     default:
     case 'darwin': return path.resolve(`${app.getPath('appData')}/../RaiBlocks/config.json`);
+    case 'win32': return path.resolve(`${app.getPath('appData')}/RaiBlocks/config.json`);
   }
 }
 
@@ -56,7 +57,13 @@ async function saveNodeConfig(data) {
 }
 
 async function getAppConfig() {
-  return await getJSONFile(getAppConfigPath());
+  try {
+    return await getJSONFile(getAppConfigPath());
+  } catch (err) {
+    // Assuming error is that no file exists, so going to attempt to create a new file
+    await saveAppConfig(defaultAppConfig);
+    return defaultAppConfig;
+  }
 }
 
 async function saveAppConfig(data) {

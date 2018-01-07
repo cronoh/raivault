@@ -9,30 +9,35 @@ import {NotificationService} from "../notification.service";
   styleUrls: ['./receive.component.css']
 })
 export class ReceiveComponent implements OnInit {
-  pendingAccountModel = 0;
+  accounts$ = this.walletService.accounts$;
 
-  accounts = [];
+  pendingAccountModel = 0;
   pendingBlocks = [];
 
-  constructor(private walletApi: RpcService, private walletService: WalletService, private notificationService: NotificationService) { }
+  constructor(private walletService: WalletService, private notificationService: NotificationService) { }
 
   async ngOnInit() {
     this.pendingBlocks = await this.walletService.loadPendingTransactions();
-
-    // TODO: This should pull from walletService observable instead
-    const accounts = await this.walletApi.accountList(this.walletService.walletID);
-
-    this.accounts = accounts.accounts;
   }
 
   async searchIncoming() {
-    await this.walletApi.searchPending(this.walletService.walletID);
+    if (this.walletService.walletIsLocked()) return this.notificationService.sendWarning(`Wallet must be unlocked`);
+    try {
+      const started = await this.walletService.walletApi.searchPending(this.walletService.wallet.id);
+      if (started && started.started == 'true') {
+        this.notificationService.sendSuccess(`Successfully issued request to search the network for pending transactions`);
+      } else {
+        this.notificationService.sendError(`Node rejected the discovery request - maybe the wallet is locked?`);
+      }
+    } catch (err) {
+      this.notificationService.sendError(`Unable to issue request`);
+    }
   }
 
-  async loadPendingAll() {
+  async loadPendingForAll() {
     this.pendingBlocks = [];
 
-    const pending = await this.walletService.walletApi.walletPending(this.walletService.walletID, 20);
+    const pending = await this.walletService.walletApi.walletPending(this.walletService.wallet.id, 20);
     if (!pending || !pending.blocks) return;
 
     for (let account in pending.blocks) {
@@ -50,10 +55,10 @@ export class ReceiveComponent implements OnInit {
     }
   }
 
-  async loadPendingAccount(account) {
+  async loadPendingForAccount(account) {
     this.pendingBlocks = [];
 
-    const pending = await this.walletApi.pending(account, 10);
+    const pending = await this.walletService.walletApi.pending(account, 10);
     if (!pending || !pending.blocks) return;
 
     for (let block in pending.blocks) {
@@ -69,25 +74,26 @@ export class ReceiveComponent implements OnInit {
 
   async getPending(account) {
     if (!account || account == 0) {
-      await this.loadPendingAll();
+      await this.loadPendingForAll();
     } else {
-      await this.loadPendingAccount(account);
+      await this.loadPendingForAccount(account);
     }
   }
 
-  async receivePending(account, block) {
-    if (this.walletService.walletIsLocked()) {
-      return this.notificationService.sendWarning(`Wallet must be unlocked`);
+  async receivePending(pendingBlock) {
+    if (this.walletService.walletIsLocked()) return this.notificationService.sendWarning(`Wallet must be unlocked`);
+    pendingBlock.loading = true;
+    const response = await this.walletService.walletApi.receive(this.walletService.wallet.id, pendingBlock.account, pendingBlock.block);
+    pendingBlock.loading = false;
+
+    if (response && response.block) {
+      this.notificationService.sendSuccess(`Successfully received XRB`);
+      await this.walletService.reloadWallet();
+    } else {
+      this.notificationService.sendError(`Unable to receive block, it might have been received by the node.`);
     }
-    const response = await this.walletApi.receive(this.walletService.walletID, account, block);
 
-    // TODO: trigger reload of wallet?
-    console.log(response);
-    await this.walletService.reloadWallet();
-    await this.walletService.loadAccounts();
-    await this.getPending(this.pendingAccountModel);
-
-    this.notificationService.sendSuccess(`Successfully received XRB`);
+    await this.getPending(this.pendingAccountModel); // Reload pending search
   }
 
 }

@@ -17,7 +17,9 @@
         </div>
 
         <div *ngIf="!node.online || !wallet.id">
-          <a routerLink="/configure" *ngIf="!node.online || !wallet.id" class="uk-text-warning"><span uk-icon="icon: warning" class="uk-text-top"></span> <span class="uk-text-bottom">Configure Node</span></a>
+          <a routerLink="/configure" *ngIf="!node.online || !wallet.id" class="uk-text-warning">
+            <span uk-icon="icon: warning" class="uk-text-top"></span> <span class="uk-text-bottom">Node Offline</span>
+          </a>
         </div>
       </div>
     </div>
@@ -39,6 +41,3 @@
     </div>
   </div>
 </div>
-
-
-<!--<app-wallet-unlock></app-wallet-unlock>-->

@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 
 const express = require('express');
 const rpcProxy = express();
@@ -24,9 +24,9 @@ let mainWindow;
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1000, height: 540});
-  mainWindow.loadURL('http://static.raivault.io.s3-us-west-2.amazonaws.com/index.html');
-  // mainWindow.loadURL('http://localhost:3000/');
+  mainWindow = new BrowserWindow({width: 1000, height: 600});
+  // mainWindow.loadURL('http://static.raivault.io.s3-website-us-west-2.amazonaws.com/index.html');
+  mainWindow.loadURL('http://localhost:4200/');
   // TODO: Use environment to load config which holds the actual url to load for the app
 
   // Emitted when the window is closed.
@@ -36,6 +36,11 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
   })
+
+  mainWindow.webContents.on('new-window', function(e, url) {
+    e.preventDefault();
+    shell.openExternal(url);
+  });
 }
 
 app.on('ready', createWindow)

@@ -19,9 +19,6 @@
     "mac": {
       "category": "public.app-category.finance"
     },
-    "win": {
-      "target": "msi"
-    },
     "linux": {
       "target": "AppImage"
     }

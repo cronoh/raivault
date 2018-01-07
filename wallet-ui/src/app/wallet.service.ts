@@ -33,20 +33,15 @@ export interface RaiPendingTransaction {
 
 @Injectable()
 export class WalletService {
-  walletID = ``;
-
   node: RaiNode = {
     online: false,
     count: 0,
     unchecked: 0,
   };
 
-  accounts: any[] = [];
-
   kxrb = new BigNumber(1000000000000000000000000000);
   rai = new BigNumber(1000000000000000000000000);
   mxrb = new BigNumber(1000000000000000000000000000000);
-
 
   wallet: RaiWallet = {
     id: null,
@@ -57,6 +52,8 @@ export class WalletService {
     pendingTransactions: [],
   };
   wallet$ = new Rx.BehaviorSubject(this.wallet);
+  walletLocked$ = this.wallet$.map(w => w.locked);
+  accounts$ = this.wallet$.map(w => w.accounts);
 
   constructor(public walletApi: RpcService) { }
 
@@ -74,13 +71,13 @@ export class WalletService {
     return this.wallet.id;
   }
 
-  async loadWallet() {
-    const walletID = await this.loadWalletID();
-
-    if (!walletID) return;
-
-    await this.reloadWallet();
-  }
+  // async loadWallet() {
+  //   const walletID = await this.loadWalletID();
+  //
+  //   if (!walletID) return;
+  //
+  //   await this.reloadWallet();
+  // }
 
   async setWalletID(walletID) {
     const updated = await this.walletApi.saveAppConfig({ walletID });
@@ -94,15 +91,15 @@ export class WalletService {
    * @returns {Promise<void>}
    */
   async reloadWallet() {
-    this.accounts = [];
+    // this.accounts = [];
     this.wallet.locked = false;
     this.wallet.balance = 0;
     this.wallet.pending = 0;
     this.wallet.accounts = [];
     this.wallet.pendingTransactions = [];
 
-    if (!this.node.online) return; // Node is offline, can't go much further
-    if (!this.wallet.id || !this.wallet.id.length) return; // Wallet ID is not configured yet.
+    if (!this.node.online) return this.pushWalletUpdate(); // Node is offline, can't go much further
+    if (!this.wallet.id || !this.wallet.id.length) return this.pushWalletUpdate(); // Wallet ID is not configured yet.
 
     // Load the accounts for this wallet, compute some totals
     const accounts = await this.walletApi.walletBalances(this.wallet.id);
@@ -123,38 +120,19 @@ export class WalletService {
       this.wallet.pendingTransactions = await this.loadPendingTransactions();
     }
 
-
     // Determine if the wallet is locked
     const locked = await this.walletApi.walletLocked(this.wallet.id);
     this.wallet.locked = locked.locked === '1';
 
     // Push new wallet information out to subscribers
-    this.wallet$.next(this.wallet);
+    this.pushWalletUpdate();
 
     return this.wallet;
   }
 
-  async loadAccounts() {
-    this.accounts = [];
-    const accounts = await this.walletApi.walletBalances(this.walletID);
-    for (let account in accounts.balances) {
-      const newAccount = {
-        id: account,
-        balance: new BigNumber(accounts.balances[account].balance),
-        pending: new BigNumber(accounts.balances[account].pending),
-      };
-      this.accounts.push(newAccount);
-    }
+  pushWalletUpdate() {
+    this.wallet$.next(this.wallet);
   }
-
-  async getAccounts() {
-    if (!this.accounts.length) {
-      await this.loadAccounts();
-    }
-
-    return this.accounts;
-  }
-
 
   async pollNodeStatus() {
     await this.checkNodeStatus();

@@ -9,19 +9,19 @@ import {WalletService} from "../wallet.service";
   styleUrls: ['./history.component.css']
 })
 export class HistoryComponent implements OnInit {
-  accounts: any[] = [];
   accountHistory: any[] = [];
 
-  constructor(private walletApi: RpcService, private walletService: WalletService) { }
+  accounts$ = this.walletService.accounts$;
+
+  constructor(private walletService: WalletService) { }
 
   async ngOnInit() {
-    this.accounts = this.walletService.wallet.accounts;
   }
 
   async getAccountHistory(account) {
     this.accountHistory = [];
 
-    const history = await this.walletApi.accountHistory(account);
+    const history = await this.walletService.walletApi.accountHistory(account);
     if (history && history.history && Array.isArray(history.history)) {
       this.accountHistory = history.history;
     }

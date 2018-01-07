@@ -13,7 +13,6 @@ import {NotificationService} from "../notification.service";
 export class SendComponent implements OnInit {
   activePanel = 'send';
 
-  accounts = [];
   accounts$ = this.walletService.wallet$.map(w => w.accounts);
 
   amounts = [
@@ -23,25 +22,21 @@ export class SendComponent implements OnInit {
   ];
   selectedAmount = this.amounts[2];
 
-  toAccountInfo: any = {};
-
   amount = 0;
-  rawAmount: BigNumber|number = 0;
+  rawAmount: BigNumber|number|string = 0;
   fromAccount: any = {};
   fromAccountID: any = '';
   toAccount: any = false;
   toAccountID: '';
   toAccountStatus = null;
 
-  constructor(private walletService: WalletService, private walletApi: RpcService, private notificationService: NotificationService) { }
+  constructor(private walletService: WalletService, private notificationService: NotificationService) { }
 
   async ngOnInit() {
-    this.accounts = await this.walletService.getAccounts();
   }
 
-  async validateDestination(event) {
-    const destAddy = this.toAccountID;
-    const accountInfo = await this.walletApi.accountInfo(destAddy);
+  async validateDestination() {
+    const accountInfo = await this.walletService.walletApi.accountInfo(this.toAccountID);
     if (accountInfo.error) {
       if (accountInfo.error == 'Account not found') {
         this.toAccountStatus = 1;
@@ -54,10 +49,14 @@ export class SendComponent implements OnInit {
     }
   }
 
-  async confirm() {
-    // Do two api requests? or rely on local to save us one call?
+  async sendTransaction() {
+    const isValid = await this.walletService.walletApi.validateAccountNumber(this.toAccountID);
+    if (!isValid || isValid.valid == '0') return this.notificationService.sendWarning(`To account address is not valid`);
+    if (!this.fromAccountID || !this.toAccountID) return this.notificationService.sendWarning(`From and to account are required`);
+
     const from = await this.walletService.walletApi.accountInfo(this.fromAccountID);
     const to = await this.walletService.walletApi.accountInfo(this.toAccountID);
+    if (!from) return this.notificationService.sendError(`From account not found`);
 
     from.balance = new BigNumber(from.balance || 0);
     to.balance = new BigNumber(to.balance || 0);
@@ -65,22 +64,22 @@ export class SendComponent implements OnInit {
     this.fromAccount = from;
     this.toAccount = to;
 
-    const rawAmount = await this.getAmountBaseValue(this.amount);
-    this.rawAmount = new BigNumber(rawAmount.amount);
+    const rawAmount = await this.getAmountBaseValue(this.amount || 0);
+    this.rawAmount = rawAmount.amount;
+    const rawAmountBN = new BigNumber(this.rawAmount || 0);
+
+    if (this.amount < 0 || rawAmountBN.lessThan(0)) return this.notificationService.sendWarning(`Amount is invalid`);
+    if (from.balance.minus(rawAmountBN).lessThan(0)) return this.notificationService.sendError(`From account does not have enough XRB`);
 
     this.activePanel = 'confirm';
   }
 
-  async send() {
-    const amount = this.rawAmount;
-    const from = this.fromAccountID;
-    const to = this.toAccountID;
+  async confirmTransaction() {
+    if (this.walletService.walletIsLocked()) return this.notificationService.sendWarning(`Wallet must be unlocked`);
 
-    if (this.walletService.walletIsLocked()) {
-      return this.notificationService.sendWarning(`Wallet must be unlocked`);
-    }
+    // console.log('Raw amount is.... ?');
 
-    const response = await this.walletApi.send(this.walletService.walletID, from, to, amount);
+    const response = await this.walletService.walletApi.send(this.walletService.wallet.id, this.fromAccountID, this.toAccountID, this.rawAmount);
     if (response && response.block) {
       this.notificationService.sendSuccess(`Successfully sent ${this.amount} ${this.selectedAmount.name}!`);
     } else {
@@ -93,9 +92,9 @@ export class SendComponent implements OnInit {
   async getAmountBaseValue(value) {
     switch (this.selectedAmount.value) {
       default:
-      case 'rai': return await this.walletApi.raiToRaw(value);
-      case 'mrai': return await this.walletApi.mraiToRaw(value);
-      case 'krai': return await this.walletApi.kraiToRaw(value);
+      case 'rai': return await this.walletService.walletApi.raiToRaw(value);
+      case 'mrai': return await this.walletService.walletApi.mraiToRaw(value);
+      case 'krai': return await this.walletService.walletApi.kraiToRaw(value);
     }
   }
 

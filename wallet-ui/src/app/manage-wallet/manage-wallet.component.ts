@@ -13,7 +13,6 @@ export class ManageWalletComponent implements OnInit {
 
   newPassword = '';
   confirmPassword = '';
-  unlockPassword = '';
 
   constructor(private walletService: WalletService, private notificationService: NotificationService) { }
 
@@ -22,7 +21,8 @@ export class ManageWalletComponent implements OnInit {
   }
 
   async changePassword() {
-    if (this.newPassword !== this.confirmPassword) return;
+    if (this.newPassword !== this.confirmPassword) return this.notificationService.sendError(`Passwords do not match`);
+    if (this.walletService.walletIsLocked()) return this.notificationService.sendWarning(`Wallet must be unlocked`);
 
     const updated = await this.walletService.walletApi.walletPasswordChange(this.wallet.id, this.newPassword);
 

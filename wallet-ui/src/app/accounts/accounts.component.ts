@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {RpcService} from "../rpc.service";
 import {BigNumber} from "bignumber.js";
 import {WalletService} from "../wallet.service";
+import {NotificationService} from "../notification.service";
 
 @Component({
   selector: 'app-accounts',
@@ -9,32 +10,26 @@ import {WalletService} from "../wallet.service";
   styleUrls: ['./accounts.component.css']
 })
 export class AccountsComponent implements OnInit {
+  accounts$ = this.walletService.accounts$;
 
-  walletID = `3B81D47609AB9961587620DADF99AEA1586800BA6F99E110A6D36DA406E6BE5F`;
-  mxrb = 1000000000000000000000000000000;
-
-  // accounts: any[] = [];
-
-  accounts = this.walletService.wallet.accounts;
-
-  accounts$ = this.walletService.wallet$.map(w => w.accounts);
-
-  constructor(private walletApi: RpcService, private walletService: WalletService) { }
+  constructor(private walletService: WalletService, private notificationService: NotificationService) { }
 
   async ngOnInit() {
-    this.accounts = this.walletService.wallet.accounts;
-
-    this.walletService.wallet$.subscribe(newWallet => {
-      console.log('got a new wallet? ', newWallet);
-    })
   }
 
   async createAccount() {
-    const newAccount = await this.walletService.walletApi.accountCreate(this.walletService.wallet.id);
+    if (this.walletService.walletIsLocked()) {
+      return this.notificationService.sendError(`Wallet is locked.`);
+    }
+    try {
+      const newAccount = await this.walletService.walletApi.accountCreate(this.walletService.wallet.id);
+      if (!newAccount || newAccount.error) return this.notificationService.sendError(`Error creating account.`);
 
-    await this.walletService.reloadWallet();
-    this.accounts = this.walletService.wallet.accounts;
+      await this.walletService.reloadWallet();
+      this.notificationService.sendSuccess(`Successfully created new account!`);
+    } catch (err) {
+      this.notificationService.sendError(`Error creating account. Make sure your node is online`);
+    }
   }
-
 
 }

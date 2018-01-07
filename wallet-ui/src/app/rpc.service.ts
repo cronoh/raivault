@@ -58,7 +58,7 @@ export class RpcService {
   async walletCreate(): Promise<{wallet: string}> {
     return await this.request('wallet_create', { });
   }
-  async accountCreate(wallet): Promise<{account: string}> {
+  async accountCreate(wallet): Promise<{account?: string, error?: string}> {
     return await this.request('account_create', { wallet });
   }
   async accountHistory(account): Promise<{history: any }> {
@@ -70,13 +70,16 @@ export class RpcService {
   async accountInfo(account): Promise<any> {
     return await this.request('account_info', { account });
   }
+  async validateAccountNumber(account): Promise<{ valid: '1'|'0' }> {
+    return await this.request('validate_account_number', { account });
+  }
   async send(wallet, source, destination, amount): Promise<any> {
     return await this.request('send', { wallet, source, destination, amount });
   }
   async receive(wallet, account, block): Promise<any> {
     return await this.request('receive', { wallet, account, block });
   }
-  async searchPending(wallet): Promise<any> {
+  async searchPending(wallet): Promise<{ started: 'true'|'false' }> {
     return await this.request('search_pending', { wallet });
   }
   async pending(account, count): Promise<any> {
@@ -90,22 +93,22 @@ export class RpcService {
   }
 
 
-  async kraiToRaw(amount): Promise<any> {
+  async kraiToRaw(amount): Promise<{ amount: string }> {
     return await this.request('krai_to_raw', { amount });
   }
-  async kraiFromRaw(amount): Promise<any> {
+  async kraiFromRaw(amount): Promise<{ amount: string }> {
     return await this.request('krai_from_raw', { amount });
   }
-  async mraiToRaw(amount): Promise<any> {
+  async mraiToRaw(amount): Promise<{ amount: string }> {
     return await this.request('mrai_to_raw', { amount });
   }
-  async mraiFromRaw(amount): Promise<any> {
+  async mraiFromRaw(amount): Promise<{ amount: string }> {
     return await this.request('mrai_from_raw', { amount });
   }
-  async raiToRaw(amount): Promise<any> {
+  async raiToRaw(amount): Promise<{ amount: string }> {
     return await this.request('rai_to_raw', { amount });
   }
-  async raiFromRaw(amount): Promise<any> {
+  async raiFromRaw(amount): Promise<{ amount: string }> {
     return await this.request('rai_from_raw', { amount });
   }
 
