@@ -7,12 +7,13 @@ RaiVault is a desktop application which aims to make it incredibly easy to use t
 RaiVault currently requires you to run a local RaiBlocks wallet to be able to sync with the network.  All communication inside the app is to your own computer and RaiBlocks node - **none of your information is ever transferred to any outside servers**.
 
 #### Important Notice
-> If you are already using your local RaiBlock wallet: **Please back up your wallet seed before using if you haven't already, just incase!**
+> If you are already using your local RaiBlocks wallet: **Please back up your wallet seed before using if you haven't already, just incase!**
 
-#
 #
 
 RaiVault is currently in early beta so please submit any bugs or feedback you have in the  [issue tracker](https://github.com/cronoh/raivault/issues/new).
+
+#
 
 # Table of Contents
 * [Install](#install-raivault)
@@ -25,11 +26,11 @@ RaiVault is currently in early beta so please submit any bugs or feedback you ha
 
 Simply head over to the [releases section](https://github.com/cronoh/raivault/releases)  and download the fully compiled binary for your OS to get started!
 
-##### Everything below is only for contributing to the development of RaiVault
 #
-##### To download RaiVault go to the [releases section](https://github.com/cronoh/raivault/releases)
 
-#
+### Everything below is only for contributing to the development of RaiVault
+### To download RaiVault go to the [releases section](https://github.com/cronoh/raivault/releases)
+
 #
 
 # Development Prerequisites
