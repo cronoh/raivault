@@ -1,6 +1,6 @@
 {
   "name": "RaiVault",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "Wallet for interacting with RaiBlocks nodes",
   "author": "Andrew Steele",

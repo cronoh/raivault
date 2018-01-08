@@ -19,17 +19,13 @@ export class AddressBookComponent implements OnInit {
   constructor(private addressBookService: AddressBookService, private walletService: WalletService, private notificationService: NotificationService) { }
 
   async ngOnInit() {
-    console.log(`Loading address book?`);
-
     const book = await this.addressBookService.loadAddressBook();
-    console.log(book);
   }
 
   async saveNewAddress() {
     if (!this.newAddressAccount || !this.newAddressName) return this.notificationService.sendError(`Account and name are required`);
 
-    // Make sure the name isn't in use..
-    console.log(`Checking if name exists: ${this.newAddressAccount}`);
+    // Make sure name doesn't exist
     if (this.addressBookService.nameExists(this.newAddressName)) {
       return this.notificationService.sendError(`This name is already in use!  Please use a unique name`);
     }

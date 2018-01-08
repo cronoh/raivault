@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {RpcService} from "./rpc.service";
-import {BehaviorSubject} from 'rxjs-es';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class AddressBookService {
@@ -19,18 +19,13 @@ export class AddressBookService {
   }
 
   async saveAddress(account, name) {
-    console.log(`Adding address ${account}:${name}`);
     this.addressBook = await this.walletApi.saveAddressBook(account, name);
     this.addressBook$.next(this.addressBook);
-
-    console.log('Saved', this.addressBook);
   }
 
   async deleteAddress(account) {
     this.addressBook = await this.walletApi.deleteAddressBook(account);
     this.addressBook$.next(this.addressBook);
-
-    console.log('Deleted?', this.addressBook);
   }
 
   getAccountName(account) {
