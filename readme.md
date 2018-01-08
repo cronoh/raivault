@@ -1,5 +1,7 @@
 # RaiVault
 
+![RaiVault Screenshot](https://raivault.s3-us-west-2.amazonaws.com/RaiVaultWallet.png)
+
 RaiVault is a desktop application which aims to make it incredibly easy to use the RaiBlocks cryptocurrency.  It is currently in early beta so please submit any bugs or feedback you have.  **Always back up your wallet seeds!**
 
 RaiVault currently requires you to run a local RaiBlocks wallet to be able to sync with the network.  All communication inside the app is to your own computer and RaiBlocks node - none of your information is ever transferred to any outside servers.
