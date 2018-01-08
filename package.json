@@ -25,6 +25,7 @@
   },
   "scripts": {
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dist-full": "electron-builder -wml --x64"
   }
 }
