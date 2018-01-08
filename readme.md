@@ -26,12 +26,12 @@ RaiVault is currently in early beta so please submit any bugs or feedback you ha
 
 Simply head over to the [releases section](https://github.com/cronoh/raivault/releases)  and download the fully compiled binary for your OS to get started!
 
-#
+###
 
 ### Everything below is only for contributing to the development of RaiVault
 ### To download RaiVault go to the [releases section](https://github.com/cronoh/raivault/releases)
 
-#
+###
 
 # Development Prerequisites
 - Node Package Manager: [Install NPM](https://www.npmjs.com/get-npm)
