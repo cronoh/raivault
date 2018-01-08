@@ -9,11 +9,9 @@ RaiVault currently requires you to run a local RaiBlocks wallet to be able to sy
 #### Important Notice
 > If you are already using your local RaiBlocks wallet: **Please back up your wallet seed before using if you haven't already, just incase!**
 
-#
-
 RaiVault is currently in early beta so please submit any bugs or feedback you have in the  [issue tracker](https://github.com/cronoh/raivault/issues/new).
 
-#
+___
 
 # Table of Contents
 * [Install](#install-raivault)
@@ -22,16 +20,16 @@ RaiVault is currently in early beta so please submit any bugs or feedback you ha
 * [Development Guide](#development-guide)
 * [Build](#build)
 
+___
+
 # Install RaiVault
 
 Simply head over to the [releases section](https://github.com/cronoh/raivault/releases)  and download the fully compiled binary for your OS to get started!
 
-###
+#### Everything below is only for contributing to the development of RaiVault
+#### To download RaiVault go to the [releases section](https://github.com/cronoh/raivault/releases)
 
-### Everything below is only for contributing to the development of RaiVault
-### To download RaiVault go to the [releases section](https://github.com/cronoh/raivault/releases)
-
-###
+___
 
 # Development Prerequisites
 - Node Package Manager: [Install NPM](https://www.npmjs.com/get-npm)
