@@ -20,11 +20,11 @@ ___
 * [Development Guide](#development-guide)
 * [Build](#build)
 
-___
-
 # Install RaiVault
 
 Simply head over to the [releases section](https://github.com/cronoh/raivault/releases)  and download the fully compiled binary for your OS to get started!
+
+___
 
 #### Everything below is only for contributing to the development of RaiVault
 #### To download RaiVault go to the [releases section](https://github.com/cronoh/raivault/releases)
