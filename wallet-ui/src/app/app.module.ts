@@ -21,6 +21,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import {NotificationService} from "./notification.service";
 import { WalletWidgetComponent } from './wallet-widget/wallet-widget.component';
 import { ConfigureWalletComponent } from './configure-wallet/configure-wallet.component';
+import { AddressBookComponent } from './address-book/address-book.component';
+import {AddressBookService} from "./address-book.service";
 
 
 @NgModule({
@@ -38,6 +40,7 @@ import { ConfigureWalletComponent } from './configure-wallet/configure-wallet.co
     NotificationsComponent,
     WalletWidgetComponent,
     ConfigureWalletComponent,
+    AddressBookComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +53,7 @@ import { ConfigureWalletComponent } from './configure-wallet/configure-wallet.co
     RpcService,
     WalletService,
     NotificationService,
+    AddressBookService,
   ],
   bootstrap: [AppComponent]
 })

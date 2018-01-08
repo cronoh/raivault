@@ -5,6 +5,9 @@ const _ = require('lodash');
 const crypto = require('crypto');
 
 const config = require('./config');
+
+const addressBookController = require('./component/address-book/address-book.controller');
+
 const proxyUrl = `http://127.0.0.1:7076`;
 
 function configureRoutes(app) {
@@ -60,6 +63,10 @@ function configureRoutes(app) {
       return res.status(400).json({ error: `Unable to save app config: ${err.message}` });
     }
   });
+
+  app.get('/api/address-book', addressBookController.getAddressBookEndpoint);
+  app.post('/api/address-book', addressBookController.saveAddressBookEndpoint);
+  app.post('/api/address-book-remove', addressBookController.deleteAddressBookEndpoint);
 
   app.post('/api/generate-seed', async (req, res) => {
     crypto.randomBytes(32, (err, buffer) => {

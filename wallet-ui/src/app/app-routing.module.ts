@@ -9,10 +9,12 @@ import {ConfigureComponent} from "./configure/configure.component";
 import {WelcomeComponent} from "./welcome/welcome.component";
 import {ManageWalletComponent} from "./manage-wallet/manage-wallet.component";
 import {ConfigureWalletComponent} from "./configure-wallet/configure-wallet.component";
+import {AddressBookComponent} from "./address-book/address-book.component";
 
 const routes: Routes = [
   { path: '', component: WelcomeComponent },
   { path: 'accounts', component: AccountsComponent },
+  { path: 'address-book', component: AddressBookComponent },
   { path: 'configure', component: ConfigureComponent },
   { path: 'configure-wallet', component: ConfigureWalletComponent },
   { path: 'manage-wallet', component: ManageWalletComponent },

@@ -30,6 +30,15 @@ export class RpcService {
   async saveAppConfig(config): Promise<any> {
     return await this.http.post(`${this.rpcUrl}/app-config`, config).toPromise();
   }
+  async getAddressBook(): Promise<any> {
+    return await this.http.get(`${this.rpcUrl}/address-book`).toPromise();
+  }
+  async saveAddressBook(account, name): Promise<any> {
+    return await this.http.post(`${this.rpcUrl}/address-book`, { account, name }).toPromise();
+  }
+  async deleteAddressBook(account): Promise<any> {
+    return await this.http.post(`${this.rpcUrl}/address-book-remove`, { account }).toPromise();
+  }
 
   async blockCount(): Promise<{count: number, unchecked: number }> {
     return await this.request('block_count', { });

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {WalletService} from "../wallet.service";
-import {RpcService} from "../rpc.service";
 import BigNumber from "bignumber.js";
 import {NotificationService} from "../notification.service";
+import {AddressBookService} from "../address-book.service";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Component({
   selector: 'app-send',
@@ -14,6 +14,8 @@ export class SendComponent implements OnInit {
   activePanel = 'send';
 
   accounts$ = this.walletService.wallet$.map(w => w.accounts);
+  addressBookResults$ = new BehaviorSubject([]);
+  showAddressBook = false;
 
   amounts = [
     { name: 'mRai', value: 'mrai'},
@@ -30,12 +32,35 @@ export class SendComponent implements OnInit {
   toAccountID: '';
   toAccountStatus = null;
 
-  constructor(private walletService: WalletService, private notificationService: NotificationService) { }
+  constructor(private walletService: WalletService, private addressBookService: AddressBookService, private notificationService: NotificationService) { }
 
   async ngOnInit() {
+    await this.addressBookService.loadAddressBook();
+  }
+
+  searchAddressBook() {
+    this.showAddressBook = true;
+    const search = this.toAccountID || '';
+    const addressBook = this.addressBookService.addressBook;
+
+    const matches = addressBook
+      .filter(a => a.name.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+      .slice(0, 5);
+
+    this.addressBookResults$.next(matches);
+  }
+
+  selectBookEntry(account) {
+    this.showAddressBook = false;
+    this.toAccountID = account;
+    this.searchAddressBook();
+    this.validateDestination();
   }
 
   async validateDestination() {
+    // The timeout is used to solve a bug where the results get hidden too fast and the click is never registered
+    setTimeout(() => this.showAddressBook = false, 400);
+
     const accountInfo = await this.walletService.walletApi.accountInfo(this.toAccountID);
     if (accountInfo.error) {
       if (accountInfo.error == 'Account not found') {
@@ -76,8 +101,6 @@ export class SendComponent implements OnInit {
 
   async confirmTransaction() {
     if (this.walletService.walletIsLocked()) return this.notificationService.sendWarning(`Wallet must be unlocked`);
-
-    // console.log('Raw amount is.... ?');
 
     const response = await this.walletService.walletApi.send(this.walletService.wallet.id, this.fromAccountID, this.toAccountID, this.rawAmount);
     if (response && response.block) {
