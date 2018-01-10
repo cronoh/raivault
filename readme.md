@@ -22,7 +22,7 @@ ___
 
 # Install RaiVault
 
-Simply head over to the [releases section](https://github.com/cronoh/raivault/releases)  and download the fully compiled binary for your OS to get started!
+Simply head over to the [releases section](https://github.com/cronoh/raivault/releases) and download the latest version of the application for your OS to get started!
 
 ___
 
