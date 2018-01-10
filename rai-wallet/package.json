@@ -1,6 +1,6 @@
 {
   "name": "RaiVault",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A desktop wallet for working with RaiBlocks",
   "main": "main.js",
   "scripts": {
