@@ -42,12 +42,12 @@
             </thead>
             <tbody>
             <tr *ngFor="let block of pendingBlocks">
-              <td class="uk-text-nowrap">{{ block.account | squeeze}}</td>
-              <td class="uk-text-nowrap">{{ block.source | squeeze}}</td>
+              <td class="uk-text-truncate"><a class="uk-link-text" (click)="modal.showAccount(block.account)" title="View Account Details" uk-tooltip>{{ block.account }}</a></td>
+              <td class="uk-text-truncate"><a class="uk-link-text" (click)="modal.showAccount(block.source)" title="View Account Details" uk-tooltip>{{ block.source }}</a></td>
               <td>{{ block.amount | rai: 'dynamic' }}</td>
               <td class="uk-text-nowrap">
-                <button *ngIf="!block.loading" (click)="receivePending(block)" class="uk-button uk-button-secondary uk-width-1-1">Receive</button>
-                <button *ngIf="block.loading" class="uk-button uk-button-secondary uk-disabled uk-width-1-1"><span class="uk-margin-right" uk-spinner></span> Loading</button>
+                <button *ngIf="!block.loading" (click)="receivePending(block)" class="uk-button uk-button-secondary uk-button-small">Receive</button>
+                <button *ngIf="block.loading" class="uk-button uk-button-secondary uk-disabled uk-button-small"><span class="uk-margin-right" uk-spinner></span> Loading</button>
               </td>
             </tr>
             <tr *ngIf="!pendingBlocks.length">

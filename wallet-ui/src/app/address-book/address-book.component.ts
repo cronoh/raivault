@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AddressBookService} from "../address-book.service";
 import {NotificationService} from "../notification.service";
 import {WalletService} from "../wallet.service";
+import {ModalService} from "../modal.service";
 
 @Component({
   selector: 'app-address-book',
@@ -16,7 +17,7 @@ export class AddressBookComponent implements OnInit {
   newAddressAccount = '';
   newAddressName = '';
 
-  constructor(private addressBookService: AddressBookService, private walletService: WalletService, private notificationService: NotificationService) { }
+  constructor(private addressBookService: AddressBookService, private walletService: WalletService, private notificationService: NotificationService, public modal: ModalService) { }
 
   async ngOnInit() {
     const book = await this.addressBookService.loadAddressBook();

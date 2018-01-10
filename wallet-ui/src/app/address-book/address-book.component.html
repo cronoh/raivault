@@ -19,16 +19,18 @@
           <table class="uk-table uk-table-striped uk-table-small">
             <thead>
             <tr>
-              <th>Name</th>
-              <th>Account ID</th>
-              <th class="uk-text-center">Options</th>
+              <th class="uk-width-2-5">Name</th>
+              <th class="uk-width-3-6">Account ID</th>
+              <th class="uk-width-1-6 uk-text-center">Options</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let addressBook of addressBook$ | async">
-              <td>{{ addressBook.name }}</td>
-              <td>{{ addressBook.account }}</td>
-              <td class="uk-text-center"><a (click)="deleteAddress(addressBook.account)" class="uk-text-danger"><span uk-icon="icon: trash;"></span></a></td>
+              <td>{{ addressBook.name }} </td>
+              <td class="uk-text-truncate"><a (click)="modal.showAccount(addressBook.account)" class="uk-link-text" title="View Account Details" uk-tooltip>{{ addressBook.account }}</a></td>
+              <td class="uk-text-center">
+                <a (click)="deleteAddress(addressBook.account)" class="uk-text-danger" title="Delete From Address Book" uk-tooltip><span uk-icon="icon: trash;"></span></a>
+              </td>
             </tr>
             </tbody>
           </table>

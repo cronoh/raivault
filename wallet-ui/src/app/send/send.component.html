@@ -32,7 +32,7 @@
                 <label class="uk-form-label" for="form-horizontal-select">From Account</label>
                 <div class="uk-form-controls">
                   <select class="uk-select" [(ngModel)]="fromAccountID" id="form-horizontal-select">
-                    <option *ngFor="let account of accounts$ | async" [value]="account.id">{{ account.id }} ({{ account.balance | rai: 'dynamic' }})</option>
+                    <option *ngFor="let account of accounts$ | async" [value]="account.id">{{ account.addressBookName ? account.addressBookName+' ('+account.id+')' : account.id }} ({{ account.balance | rai: 'dynamic' }})</option>
                   </select>
                 </div>
               </div>

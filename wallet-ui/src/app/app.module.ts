@@ -23,6 +23,9 @@ import { WalletWidgetComponent } from './wallet-widget/wallet-widget.component';
 import { ConfigureWalletComponent } from './configure-wallet/configure-wallet.component';
 import { AddressBookComponent } from './address-book/address-book.component';
 import {AddressBookService} from "./address-book.service";
+import {ClipboardModule} from "ngx-clipboard";
+import { AccountViewerComponent } from './account-viewer/account-viewer.component';
+import {ModalService} from "./modal.service";
 
 
 @NgModule({
@@ -41,6 +44,7 @@ import {AddressBookService} from "./address-book.service";
     WalletWidgetComponent,
     ConfigureWalletComponent,
     AddressBookComponent,
+    AccountViewerComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,12 +52,14 @@ import {AddressBookService} from "./address-book.service";
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    ClipboardModule,
   ],
   providers: [
     RpcService,
     WalletService,
     NotificationService,
     AddressBookService,
+    ModalService,
   ],
   bootstrap: [AppComponent]
 })

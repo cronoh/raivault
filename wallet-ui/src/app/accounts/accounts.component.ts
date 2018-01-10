@@ -3,6 +3,7 @@ import {RpcService} from "../rpc.service";
 import {BigNumber} from "bignumber.js";
 import {WalletService} from "../wallet.service";
 import {NotificationService} from "../notification.service";
+import {ModalService} from "../modal.service";
 
 @Component({
   selector: 'app-accounts',
@@ -12,7 +13,7 @@ import {NotificationService} from "../notification.service";
 export class AccountsComponent implements OnInit {
   accounts$ = this.walletService.accounts$;
 
-  constructor(private walletService: WalletService, private notificationService: NotificationService) { }
+  constructor(private walletService: WalletService, private notificationService: NotificationService, public modal: ModalService) { }
 
   async ngOnInit() {
   }

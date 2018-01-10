@@ -27,5 +27,8 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "dist-full": "electron-builder -wml --x64"
+  },
+  "dependencies": {
+    "ngx-clipboard": "^9.0.1"
   }
 }

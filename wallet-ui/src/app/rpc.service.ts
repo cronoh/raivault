@@ -77,7 +77,7 @@ export class RpcService {
     return await this.request('account_list', { wallet });
   }
   async accountInfo(account): Promise<any> {
-    return await this.request('account_info', { account });
+    return await this.request('account_info', { account, pending: true, representative: true });
   }
   async validateAccountNumber(account): Promise<{ valid: '1'|'0' }> {
     return await this.request('validate_account_number', { account });
@@ -102,22 +102,22 @@ export class RpcService {
   }
 
 
-  async kraiToRaw(amount): Promise<{ amount: string }> {
+  async kraiToRaw(amount): Promise<{ amount: string, error?: string }> {
     return await this.request('krai_to_raw', { amount });
   }
-  async kraiFromRaw(amount): Promise<{ amount: string }> {
+  async kraiFromRaw(amount): Promise<{ amount: string, error?: string }> {
     return await this.request('krai_from_raw', { amount });
   }
-  async mraiToRaw(amount): Promise<{ amount: string }> {
+  async mraiToRaw(amount): Promise<{ amount: string, error?: string }> {
     return await this.request('mrai_to_raw', { amount });
   }
-  async mraiFromRaw(amount): Promise<{ amount: string }> {
+  async mraiFromRaw(amount): Promise<{ amount: string, error?: string }> {
     return await this.request('mrai_from_raw', { amount });
   }
-  async raiToRaw(amount): Promise<{ amount: string }> {
+  async raiToRaw(amount): Promise<{ amount: string, error?: string }> {
     return await this.request('rai_to_raw', { amount });
   }
-  async raiFromRaw(amount): Promise<{ amount: string }> {
+  async raiFromRaw(amount): Promise<{ amount: string, error?: string }> {
     return await this.request('rai_from_raw', { amount });
   }
 

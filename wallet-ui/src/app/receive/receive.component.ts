@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {RpcService} from "../rpc.service";
 import {WalletService} from "../wallet.service";
 import {NotificationService} from "../notification.service";
+import {ModalService} from "../modal.service";
 
 @Component({
   selector: 'app-receive',
@@ -14,7 +15,7 @@ export class ReceiveComponent implements OnInit {
   pendingAccountModel = 0;
   pendingBlocks = [];
 
-  constructor(private walletService: WalletService, private notificationService: NotificationService) { }
+  constructor(private walletService: WalletService, private notificationService: NotificationService, public modal: ModalService) { }
 
   async ngOnInit() {
     this.pendingBlocks = await this.walletService.loadPendingTransactions();

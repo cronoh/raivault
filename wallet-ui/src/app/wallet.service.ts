@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {BigNumber} from "bignumber.js";
 import {RpcService} from "./rpc.service";
 import * as Rx from 'rxjs'
+import {AddressBookService} from "./address-book.service";
 
 export interface RaiWallet {
   id: string|null;
@@ -16,6 +17,7 @@ export interface RaiAccount {
   id: string;
   balance: number|BigNumber;
   pending: number|BigNumber;
+  addressBookName: string|null;
 }
 
 export interface RaiNode {
@@ -55,7 +57,7 @@ export class WalletService {
   walletLocked$ = this.wallet$.map(w => w.locked);
   accounts$ = this.wallet$.map(w => w.accounts);
 
-  constructor(public walletApi: RpcService) { }
+  constructor(public walletApi: RpcService, private addressBook: AddressBookService) { }
 
   async loadWalletID() {
     try {
@@ -107,10 +109,12 @@ export class WalletService {
       this.wallet.balance = new BigNumber(accounts.balances[account].balance).plus(this.wallet.balance);
       this.wallet.pending = new BigNumber(accounts.balances[account].pending).plus(this.wallet.pending);
 
+      const bookEntry = this.addressBook.getAccountName(account);
       const newAccount: RaiAccount = {
         id: account,
         balance: new BigNumber(accounts.balances[account].balance),
         pending: new BigNumber(accounts.balances[account].pending),
+        addressBookName: bookEntry ? bookEntry.name : null,
       };
       this.wallet.accounts.push(newAccount);
     }

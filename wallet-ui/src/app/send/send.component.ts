@@ -90,6 +90,8 @@ export class SendComponent implements OnInit {
     this.toAccount = to;
 
     const rawAmount = await this.getAmountBaseValue(this.amount || 0);
+    if (!rawAmount || rawAmount.error) return this.notificationService.sendError(`Unable to convert amount: ${rawAmount.error}`);
+
     this.rawAmount = rawAmount.amount;
     const rawAmountBN = new BigNumber(this.rawAmount || 0);
 
@@ -110,6 +112,8 @@ export class SendComponent implements OnInit {
     }
 
     this.activePanel = 'send';
+
+    await this.walletService.reloadWallet(); // Just sent money, trigger a reload
   }
 
   async getAmountBaseValue(value) {
