@@ -25,7 +25,8 @@ let mainWindow;
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1000, height: 600});
-  mainWindow.loadURL('http://static.raivault.io.s3-website-us-west-2.amazonaws.com/index.html');
+  const options = { extraHeaders: "pragma: no-cache\n" };
+  mainWindow.loadURL('http://static.raivault.io.s3-website-us-west-2.amazonaws.com/index.html', options);
   // mainWindow.loadURL('http://localhost:4200/');
   // TODO: Use environment to load config which holds the actual url to load for the app
 
